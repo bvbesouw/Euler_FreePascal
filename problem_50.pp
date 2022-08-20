@@ -9,16 +9,32 @@ CONST max = 1000000;
 
 TYPE 
   TIntegerList = Specialize TfpgList<longint>;
+  TDynBools = array OF boolean;
 
 VAR 
   primes: TIntegerList;
   i,j,longest,largest,sum: longint;
-  is_prime : array OF boolean;
+  is_prime : TdynBools;
+
+FUNCTION Sieve(top : longint): TdynBools;
+BEGIN
+  setlength(result,top);
+  //FOR i := 2 TO top DO
+  //    result[i] := True;
+
+  FOR i := 2 TO top DO
+    BEGIN
+      IF result[i] THEN
+        FOR j := 2 TO (top DIV i) DO
+          result[i * j] := False;
+    END;
+END;
+
 
 BEGIN
   primes := TIntegerList.Create;
-  setlength(is_prime,max);
-  Sieve(is_prime);
+
+  is_prime := Sieve(max);
   FOR i := low(is_prime) TO high(is_prime) DO
     IF is_prime[i] THEN primes.add(i);
 
