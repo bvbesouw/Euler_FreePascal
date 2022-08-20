@@ -3,6 +3,7 @@ PROGRAM problem_27;
 
 {$mode ObjFPC}{$H+}
 
+
 CONST max_number = 1000;
 
 VAR is_prime: ARRAY[2..max_number] OF boolean;
@@ -11,8 +12,6 @@ VAR is_prime: ARRAY[2..max_number] OF boolean;
 BEGIN
   FOR i := 2 TO max_number DO
     is_prime[i] := true;
-  //initialize sieve;
-
   FOR i := 2 TO max_number DO
     //apply sieve
     BEGIN

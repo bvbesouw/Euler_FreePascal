@@ -3,12 +3,15 @@ PROGRAM problem_3;
 
 USES euler;
 
+TYPE 
+  TDynBools = array OF boolean;
+
 CONST 
   max_number = 548112;
   // sqrt(600851475143 div 2);
 
 VAR 
-  is_prime: ARRAY OF boolean;
+  is_prime: TDynBools;
 
 FUNCTION isprime(n: uint64): boolean;
 
@@ -40,8 +43,7 @@ BEGIN
   max := 0;
   lin := 600851475143;
   lcnt := 2;
-  setlength(is_prime,max_number);
-  Sieve(is_prime);
+  is_prime := Sieve(max_number);
 
   WHILE lcnt * lcnt <= lin DO
     BEGIN

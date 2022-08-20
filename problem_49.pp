@@ -5,15 +5,18 @@ PROGRAM problem_49;
 
 USES euler,sysutils;
 
+TYPE 
+  TDynBools = array OF boolean;
+
 CONST max_number = 10000;
 
-VAR is_prime: ARRAY OF boolean;
+VAR is_prime: TDynBools;
   x,addnumber: integer;
   found : boolean;
 
 BEGIN
-  setlength(is_prime,max_number);
-  Sieve(is_prime);
+  //setlength(is_prime,max_number);
+  is_prime := Sieve(max_number);
 
   x := 1487;
   REPEAT

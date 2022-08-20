@@ -2,9 +2,14 @@
 UNIT euler;
 {$mode ObjFPC}{$H+}
 
+
 INTERFACE
 
 USES sysutils;
+
+TYPE 
+  TDynBools = array OF boolean;
+
 FUNCTION Shuffle(inp: STRING): STRING;
 { This function shuffles all the letters of the input string and returns the new string }
 FUNCTION Reverse(inp: STRING): STRING;
@@ -37,10 +42,13 @@ FUNCTION IsPandigital(s: STRING): boolean;
 FUNCTION IsPentagonal(p: uint64): boolean;
 FUNCTION IsHexagonal(p: uint64): boolean;
 FUNCTION GCD(a, b: Int64): Int64;
+FUNCTION Sieve(top : longint): TdynBools;
 
 IMPLEMENTATION
 
 USES Classes, Math;
+
+
 
 CONST 
   to_be_checked = '123456789';
@@ -301,4 +309,20 @@ BEGIN
     END;
   result := a;
 END;
+
+FUNCTION Sieve(top : longint): TdynBools;
+
+VAR i,j : longint;
+BEGIN
+  setlength(result,top);
+  FOR i := 2 TO top DO
+    result[i] := True;
+  FOR i := 2 TO top DO
+    BEGIN
+      IF result[i] THEN
+        FOR j := 2 TO (top DIV i) DO
+          result[i * j] := False;
+    END;
+END;
+
 END.

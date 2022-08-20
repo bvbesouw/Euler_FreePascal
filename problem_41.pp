@@ -8,17 +8,19 @@ CONST
   max = 7654321;
 
 
+
 TYPE 
   tThingRec = RECORD
     ch  : Char;
     occ : Boolean;
   END;
+  TDynBools = array OF boolean;
 
 VAR 
   Thing       : Array[1..255] OF tThingRec;
   EntryString : String;
   primestrs : TStringList;
-  is_prime: ARRAY OF boolean;
+  is_prime: TDynBools;
 
 
 PROCEDURE Permutate(num : Byte);
@@ -53,14 +55,12 @@ END;
 
 VAR i : longint;
 BEGIN
-  setlength(is_prime,max);
-  Sieve(is_prime);
+  is_prime := Sieve(max);
   primestrs := TStringList.Create;
   primestrs.sorted := true;
   primestrs.Duplicates := dupIgnore;
   FillChar(Thing,sizeof(Thing),0);
   EntryString := '1234567';
-  //pandigitals 1-8 and 1-9 are divisible by 3
   Permutate(1);
   FOR i := pred(primestrs.count) DOWNTO 0 DO
     IF is_prime[strtoint(primestrs[i])] THEN
