@@ -43,6 +43,7 @@ FUNCTION IsPentagonal(p: uint64): boolean;
 FUNCTION IsHexagonal(p: uint64): boolean;
 FUNCTION GCD(a, b: Int64): Int64;
 FUNCTION Sieve(top : longint): TdynBools;
+FUNCTION isPrimeCheck(CONST n:int64): boolean;
 
 IMPLEMENTATION
 
@@ -312,6 +313,7 @@ END;
 
 FUNCTION Sieve(top : longint): TdynBools;
 {very basic sieve but works fast enough for the relative small numbers in project Euler}
+
 VAR i,j : longint;
 BEGIN
   setlength(result,top);
@@ -324,4 +326,142 @@ BEGIN
     END;
 END;
 
+FUNCTION isPrimeCheck(CONST n:int64): boolean;
+FUNCTION millerRabinTest(CONST n,a:int64): boolean;
+FUNCTION modularMultiply(x,y:qword): int64;
+
+VAR d: qword;
+  mp2: qword;
+  i: longint;
+BEGIN
+  IF (x OR y) AND 9223372034707292160=0
+    THEN result := x*y MOD n
+  ELSE
+    BEGIN
+      d := 0;
+      mp2 := n shr 1;
+      FOR i:=0 TO 62 DO
+        BEGIN
+          IF d>mp2
+            THEN d := (d shl 1)-qword(n)
+          ELSE d := d shl 1;
+          IF (x AND 4611686018427387904)>0 THEN inc(d,y);
+          IF d>=qword(n) THEN d := d+qword(n);
+          x := x shl 1;
+        END;
+      result := d;
+    END;
+END;
+
+VAR n1,d,t,p: int64;
+  j: longint = 1;
+  k: longint;
+BEGIN
+  n1 := int64(n)-1;
+  d := n shr 1;
+  WHILE NOT(odd(d)) DO
+    BEGIN
+      d := d shr 1;
+      inc(j);
+    END;
+  //1<=j<=63, 1<=d<=2^63-1
+  t := a;
+  p := a;
+  WHILE (d>1) DO
+    BEGIN
+      d := d shr 1;
+      //p:=p*p mod n;
+      p := modularMultiply(p,p);
+      IF odd(d) THEN t := modularMultiply(t,p);
+      //t:=t*p mod n;
+    END;
+  IF (t=1) OR (t=n1) THEN exit(true);
+  FOR k:=1 TO j-1 DO
+    BEGIN
+      //t:=t*t mod n;
+      t := modularMultiply(t,t);
+      IF t=n1 THEN exit(true);
+      IF t<=1 THEN break;
+    END;
+  result := false;
+END;
+
+FUNCTION isComposite: boolean;
+
+VAR x: int64 = 1;
+  y: int64 = 2*3*5*7*11*13*17*19*23*29*31*37*41*43*47;
+  z: int64 = 1;
+BEGIN
+  x := n MOD y;
+  z := y;
+  y := x;
+  WHILE (y<>0) DO
+    BEGIN
+      x := z MOD y;
+      z := y;
+      y := x;
+    END;
+  result := z>1;
+END;
+
+BEGIN
+  IF (n<=1) THEN exit(false);
+  IF (n<48) THEN exit(byte(n) in [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47]);
+  IF isComposite THEN exit(false)
+  ELSE IF n<2209 THEN exit(true);
+  //2209=47*47
+  IF n< 9080191
+    THEN exit(millerRabinTest(n,31) and
+    millerRabinTest(n,73))
+  ELSE
+    IF n<25326001
+      THEN exit(millerRabinTest(n,2) and
+      millerRabinTest(n,3) and
+      millerRabinTest(n,5))
+  ELSE
+    IF n < 4759123141
+      THEN exit(millerRabinTest(n,2) and
+      millerRabinTest(n,7) and
+      millerRabinTest(n,61))
+  ELSE
+    IF n < 2152302898747   //[41bit] it is enough to test a =   array[0..4] of byte=(2,3,5,7,11);
+      THEN exit(millerRabinTest(n, 2) and
+      millerRabinTest(n, 3) and
+      millerRabinTest(n, 5) and
+      millerRabinTest(n, 7) and
+      millerRabinTest(n,11))
+  ELSE
+    IF n < 3474749660383   //[42bit] it is enough to test a =   array[0..5] of byte=(2,3,5,7,11,13);
+      THEN exit(millerRabinTest(n, 2) and
+      millerRabinTest(n, 3) and
+      millerRabinTest(n, 5) and
+      millerRabinTest(n, 7) and
+      millerRabinTest(n,11) and
+      millerRabinTest(n,13))
+  ELSE
+    IF n < 341550071728321
+       //[49bit] it is enough to test a = array[0..6] of byte=(2,3,5,7,11,13,17);
+      THEN exit(millerRabinTest(n, 2) and
+      millerRabinTest(n, 3) and
+      millerRabinTest(n, 5) and
+      millerRabinTest(n, 7) and
+      millerRabinTest(n,11) and
+      millerRabinTest(n,13) and
+      millerRabinTest(n,17))
+  ELSE
+
+    //if n < 18446744073709551616 = 2^64, it is enough to test a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, and 37.
+    result := millerRabinTest(n, 2) AND
+              millerRabinTest(n, 3) AND
+              millerRabinTest(n, 5) AND
+              millerRabinTest(n, 7) AND
+              millerRabinTest(n,11) AND
+              millerRabinTest(n,13) AND
+              millerRabinTest(n,17) AND
+              millerRabinTest(n,19) AND
+              millerRabinTest(n,23) AND
+              millerRabinTest(n,29) AND
+              millerRabinTest(n,31) AND
+              millerRabinTest(n,37);
+END;
 END.
