@@ -311,12 +311,11 @@ BEGIN
 END;
 
 FUNCTION Sieve(top : longint): TdynBools;
-
+{very basic sieve but works fast enough for the relative small numbers in project Euler}
 VAR i,j : longint;
 BEGIN
   setlength(result,top);
-  FOR i := 2 TO top DO
-    result[i] := True;
+  FillChar(Pointer(result)^, Length(result), Byte(True));
   FOR i := 2 TO top DO
     BEGIN
       IF result[i] THEN
