@@ -202,8 +202,9 @@ BEGIN
     BEGIN
       IF lin MOD lcnt = 0 THEN
         Inc(nod, 2);
-      lcnt := lcnt + 1;
+      inc(lcnt);
     END;
+  dec(lcnt);
   IF lcnt * lcnt = lin THEN
     dec(nod);
   NumberOfDivisors := nod;

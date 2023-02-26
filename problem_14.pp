@@ -21,6 +21,7 @@ BEGIN
     IF ((n < max) AND (arr[n] > 0)) THEN
       BEGIN
         step := step + arr[n];
+        //inc(step,arr[n]);
         break;
       END;
     IF odd(n) THEN
@@ -40,6 +41,7 @@ VAR
   maxsteps, number, i: int64;
 
 BEGIN
+
   maxsteps := 0;
   FOR i := 1 TO 1000000 DO
     BEGIN
