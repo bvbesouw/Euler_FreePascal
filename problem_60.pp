@@ -1,5 +1,5 @@
 
-PROGRAM problem_7;
+PROGRAM problem_60;
 
 {$mode ObjFPC}{$H+}
 
