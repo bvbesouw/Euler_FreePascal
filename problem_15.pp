@@ -3,19 +3,27 @@ PROGRAM problem_15;
 
 {$mode objfpc}{$H+}
 
-USES gmp;
+var
+  gridSize, i, j: Integer;
+  grid: array[0..20, 0..20] of Int64;
 
-CONST grid = 20;
+begin
+  gridSize := 20;
 
-VAR 
-  a,b: mpz_t;
-  out: PChar;
+  for i := 0 to gridSize do
+  begin
+    grid[i, 0] := 1;
+    grid[0, i] := 1;
+  end;
 
-BEGIN
-  mpz_fac_ui(a,2*grid);
-  mpz_fac_ui(b,grid);
-  mpz_pow_ui(b, b, 2);
-  mpz_cdiv_q (a, a, b);
-  out := mpz_get_str(NIL, 10, a);
-  Writeln(out);
+  for i := 1 to gridSize do
+  begin
+    for j := 1 to gridSize do
+    begin
+      grid[i, j] := grid[i-1, j] + grid[i, j-1];
+    end;
+  end;
+
+
+  writeln(grid[gridSize, gridSize]);
 END.
