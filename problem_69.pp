@@ -19,7 +19,7 @@ VAR
 
 BEGIN
   result := n;
-   i := 2;
+  i := 2;
   WHILE i*i <= n DO
     BEGIN
       IF n MOD i = 0 THEN

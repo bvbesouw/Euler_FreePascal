@@ -5,7 +5,7 @@ UNIT euler;
 
 INTERFACE
 
-USES sysutils;
+USES sysutils,strutils;
 
 TYPE 
   TDynBools = array OF boolean;
@@ -36,7 +36,7 @@ FUNCTION NumberOfDivisors(lin: longint): longint;
 FUNCTION sum_of_divisors(lin: longint): longint;
 FUNCTION fact(n: uint64): uint64;
 FUNCTION intpower(base, expon: longint): longint;
-FUNCTION sort_string(woord: STRING): STRING;
+FUNCTION sort_string(inputstring: STRING): STRING;
 FUNCTION sort_number(x:qword): qword;
 FUNCTION IsPandigital(s: STRING): boolean;
 FUNCTION IsPentagonal(p: uint64): boolean;
@@ -79,18 +79,8 @@ END;
 FUNCTION Reverse(inp: STRING): STRING;
 OVERLOAD;
 
-VAR 
-  x, inp_length: longint;
-  temp         : char;
 BEGIN
-  inp_length := length(inp);
-  FOR x := 1 TO (length(inp) DIV 2) DO
-    BEGIN
-      temp := inp[x];
-      inp[x] := inp[inp_length + 1 - x];
-      inp[inp_length + 1 - x] := temp;
-    END;
-  Result := inp;
+  Result := ReverseString(inp);
 END;
 
 FUNCTION fib(CONST n: uint64): uint64;
@@ -249,29 +239,44 @@ BEGIN
   intpower := ip;
 END;
 
-FUNCTION sort_string(woord: STRING): STRING;
+FUNCTION sort_string(inputstring: STRING): STRING;
+PROCEDURE QuickSortString(VAR str: STRING; left, right: Integer);
 
 VAR 
-  flip   : boolean;
-  stop, i: integer;
-  dummy  : char;
+  i, j: Integer;
+  pivot, temp: Char;
 BEGIN
-  stop := length(woord);
-  REPEAT
-    flip := false;
-    dec(stop);
-    FOR i := 1 TO stop DO
-      BEGIN
-        IF woord[i] > woord[i + 1] THEN
-          BEGIN
-            dummy := woord[i + 1];
-            woord[i + 1] := woord[i];
-            woord[i] := dummy;
-            flip := true;
-          END;
-      END;
-  UNTIL NOT flip;
-  Result := woord;
+  i := left;
+  j := right;
+  pivot := str[(left + right) DIV 2];
+
+  WHILE i <= j DO
+    BEGIN
+      WHILE str[i] < pivot DO
+        Inc(i);
+      WHILE str[j] > pivot DO
+        Dec(j);
+
+      IF i <= j THEN
+        BEGIN
+          temp := str[i];
+          str[i] := str[j];
+          str[j] := temp;
+          Inc(i);
+          Dec(j);
+        END;
+    END;
+
+  IF left < j THEN
+    QuickSortString(str, left, j);
+  IF i < right THEN
+    QuickSortString(str, i, right);
+END;
+
+
+BEGIN
+  Result := inputString;
+  QuickSortString(Result, 1, Length(Result));
 END;
 
 FUNCTION sort_number(x : qword) : qword;

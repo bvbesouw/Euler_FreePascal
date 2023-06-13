@@ -1,42 +1,44 @@
+
 PROGRAM problem_112;
 {$mode ObjFPC}{$H+}
 
-function IsBouncy(n: integer): boolean;
-var
+FUNCTION IsBouncy(n: integer): boolean;
+
+VAR 
   lastDigit, currDigit: integer;
   increasing, decreasing: boolean;
-begin
+BEGIN
   increasing := true;
   decreasing := true;
-  lastDigit := n mod 10;
-  n := n div 10;
-  while n > 0 do
-  begin
-    currDigit := n mod 10;
-    if currDigit > lastDigit then
-      decreasing := false
-    else if currDigit < lastDigit then
-      increasing := false;
-    lastDigit := currDigit;
-    n := n div 10;
-  end;
-  result := not (increasing or decreasing);
-end;
+  lastDigit := n MOD 10;
+  n := n DIV 10;
+  WHILE n > 0 DO
+    BEGIN
+      currDigit := n MOD 10;
+      IF currDigit > lastDigit THEN
+        decreasing := false
+      ELSE IF currDigit < lastDigit THEN
+             increasing := false;
+      lastDigit := currDigit;
+      n := n DIV 10;
+    END;
+  result := NOT (increasing OR decreasing);
+END;
 
-var
+VAR 
   count, n: integer;
   proportion: real;
-begin
+BEGIN
   count := 0;
   n := 100;
-  while true do
-  begin
-    if IsBouncy(n) then
-      inc(count);
-    proportion := count / n;
-    if proportion >= 0.99 then
-      break;
-    inc(n);
-  end;
+  WHILE true DO
+    BEGIN
+      IF IsBouncy(n) THEN
+        inc(count);
+      proportion := count / n;
+      IF proportion >= 0.99 THEN
+        break;
+      inc(n);
+    END;
   writeln(n);
-end.
+END.

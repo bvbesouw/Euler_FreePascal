@@ -1,49 +1,54 @@
-program Euler78;
+
+PROGRAM Euler78;
 
 {$mode objfpc}{$H+}
 
-const
+CONST 
   K = 100000;
   Target = 1000000;
 
-type
-  TInt64Array = array of Int64;
+TYPE 
+  TInt64Array = array OF Int64;
 
-var
+VAR 
   Partitions: TInt64Array;
   n: Integer;
 
-function CalculatePartitions(i: Integer): Int64;
-var
-  j, k, s: Integer;
-begin
-  s := 0;
-  for j := 1 to i do
-  begin
-    k := j * (3 * j - 1) div 2;
-    if k > i then break;
-    if j mod 2 = 0 then s := s - Partitions[i - k] else s := s + Partitions[i - k];
-    k := k + j;
-    if k > i then continue;
-    if j mod 2 = 0 then s := s - Partitions[i - k] else s := s + Partitions[i - k];
-  end;
-  Result := s mod Target;
-end;
+FUNCTION CalculatePartitions(i: Integer): Int64;
 
-procedure ComputePartitions;
-var
+VAR 
+  j, k, s: Integer;
+BEGIN
+  s := 0;
+  FOR j := 1 TO i DO
+    BEGIN
+      k := j * (3 * j - 1) DIV 2;
+      IF k > i THEN break;
+      IF j MOD 2 = 0 THEN s := s - Partitions[i - k]
+      ELSE s := s + Partitions[i - k];
+      k := k + j;
+      IF k > i THEN continue;
+      IF j MOD 2 = 0 THEN s := s - Partitions[i - k]
+      ELSE s := s + Partitions[i - k];
+    END;
+  Result := s MOD Target;
+END;
+
+PROCEDURE ComputePartitions;
+
+VAR 
   i: Integer;
-begin
+BEGIN
   SetLength(Partitions, K + 1);
   Partitions[0] := 1;
-  for i := 1 to K do
+  FOR i := 1 TO K DO
     Partitions[i] := CalculatePartitions(i);
-end;
+END;
 
-begin
+BEGIN
   ComputePartitions;
   n := 0;
-  while Partitions[n] mod Target <> 0 do
+  WHILE Partitions[n] MOD Target <> 0 DO
     Inc(n);
   writeln(n);
-end.
+END.

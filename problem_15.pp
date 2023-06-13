@@ -3,26 +3,26 @@ PROGRAM problem_15;
 
 {$mode objfpc}{$H+}
 
-var
+VAR 
   gridSize, i, j: Integer;
-  grid: array[0..20, 0..20] of Int64;
+  grid: array[0..20, 0..20] OF Int64;
 
-begin
+BEGIN
   gridSize := 20;
 
-  for i := 0 to gridSize do
-  begin
-    grid[i, 0] := 1;
-    grid[0, i] := 1;
-  end;
+  FOR i := 0 TO gridSize DO
+    BEGIN
+      grid[i, 0] := 1;
+      grid[0, i] := 1;
+    END;
 
-  for i := 1 to gridSize do
-  begin
-    for j := 1 to gridSize do
-    begin
-      grid[i, j] := grid[i-1, j] + grid[i, j-1];
-    end;
-  end;
+  FOR i := 1 TO gridSize DO
+    BEGIN
+      FOR j := 1 TO gridSize DO
+        BEGIN
+          grid[i, j] := grid[i-1, j] + grid[i, j-1];
+        END;
+    END;
 
 
   writeln(grid[gridSize, gridSize]);
