@@ -1,6 +1,6 @@
 
 PROGRAM problem_65;
-
+{$mode ObjFPC}{$H+}
 USES euler,gmp;
 
 CONST MAX = 100;

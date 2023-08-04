@@ -1,36 +1,39 @@
+{$mode ObjFPC}{$H+} 
+uses math,euler,fgl,classes,sysutils;
+const TOPEND = 50000000;
+TYPE
+  TDynBools = ARRAY OF boolean;
+  TIntegerList = SPECIALIZE TfpgList<uint64>;
+  
+  
+var i,a,b,c,mx,result : uint32;
+    is_prime,sums: TDynBools;
+	sq, cu, fo : TIntegerList;
+	dic : tstringlist;
 
-PROGRAM problem_7;
+begin
+  is_prime := Sieve(trunc(power(topend,1/2))+1);
+  setlength(sums,TOPEND);
+  sq := TIntegerList.Create;
+  cu := TIntegerList.Create;
+  fo := TIntegerList.Create;
+  dic := tstringlist.create;
+  dic.sorted := true;
+  dic.duplicates := dupIgnore;
 
-{$mode ObjFPC}{$H+}
+	for i := 2 to 1 + trunc(power(topend,1/2)) do
+	  if is_prime[i] then sq.add(i*i);
+	for i := 2 to 1 + trunc(power(topend,1/3)) do
+	  if is_prime[i] then cu.add(i*i*i);
+	for i := 2 to 1 + trunc(power(topend,1/4)) do
+	  if is_prime[i] then fo.add(i*i*i*i);
+	  
+	 for a in sq do
+	   for b in cu do
+	     for c in fo do
+	       if a+b+c > topend then break else
+				dic.add(inttostr(a+b+c));
 
-USES fgl;
-
-
-TYPE 
-  TIntegerList = Specialize TfpgList<longint>;
-
-VAR 
-  primes: TIntegerList;
-  top, max, number, p: longint;
-  prime: boolean;
-
-BEGIN
-  max := 10001;
-  primes := TIntegerList.Create;
-  primes.Add(2);
-  number := 3;
-  WHILE primes.Count < max DO
-    BEGIN
-      prime := True;
-      top := trunc(sqrt(number));
-      FOR p := 0 TO primes.Count - 1 DO
-        BEGIN
-          IF primes.items[p] > top THEN break;
-          prime := number MOD primes.Items[p] <> 0;
-          IF NOT prime THEN break;
-        END;
-      IF prime THEN primes.add(number);
-      Inc(number, 2);
-    END;
-  writeln(primes.last);
-END.
+	writeln(dic.count);
+	     
+end.

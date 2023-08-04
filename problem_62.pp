@@ -33,5 +33,6 @@ BEGIN
       wordarr[x] := sorted;
       arr[x] := 1;
     END;
-  writeln(index*index*index);
+    
+  writeln(index,'    ',index*index*index);
 END.

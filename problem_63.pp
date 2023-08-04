@@ -15,6 +15,8 @@ BEGIN
         BEGIN
           mpz_ui_pow_ui(dummy,i,power);
           ot := mpz_get_str(NIL, 10, dummy);
+          writeln(ot);
+          writeln(high(uint64));
           IF power = length(ot) THEN
             inc(counter)
           ELSE
